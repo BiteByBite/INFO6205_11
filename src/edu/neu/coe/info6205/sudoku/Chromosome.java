@@ -11,6 +11,8 @@ import java.util.Random;
  */
 public class Chromosome {
 
+	Random rnd = new Random(0L);
+
 	/**
 	 * This is the parameterized constructor with the input to sudoku as the
 	 * parameter
@@ -18,13 +20,22 @@ public class Chromosome {
 	 * @param baseGene
 	 */
 	public Chromosome(int[] baseGene) {
+		fitness = 0;
 		this.baseGene = baseGene;
 		gene = randomizeBaseGenes(baseGene.clone());
 		size = gene.length;
 		calculateFitness();
 	}
 
+	/**
+	 * This is the parameterized constructor with the input to sudoku as the
+	 * parameter
+	 * 
+	 * @param baseGene
+	 * @param gene
+	 */
 	public Chromosome(int[] baseGene, int[] gene) {
+		fitness = 0;
 		this.baseGene = baseGene;
 		this.gene = gene;
 		size = gene.length;
@@ -112,7 +123,7 @@ public class Chromosome {
 	 * @return gene
 	 */
 	private int[] randomizeBaseGenes(int[] gene) {
-		Random rnd = new Random();
+
 		for (int i = 0; i < gene.length; i++) {
 			if (gene[i] == 0) {
 				gene[i] = rnd.nextInt((int) Math.sqrt(gene.length)) + 1;
@@ -129,6 +140,7 @@ public class Chromosome {
 	 * @return the caluculated value of fitness of this sudoku.
 	 */
 	public void calculateFitness() {
+		fitness = 0;
 		int[][] baseGene2D = convertTo2D(baseGene);
 		int[][] gene2D = convertTo2D(gene);
 		validateAllBlocks(gene2D);
@@ -143,21 +155,22 @@ public class Chromosome {
 	 * @param baseGene2D
 	 */
 	private void validateRowsAndColumns(int[][] gene2D, int[][] baseGene2D) {
-		boolean[] existFlagRow = new boolean[gene2D.length];
-		boolean[] existFlagColumn = new boolean[gene2D.length];
+
 		for (int i = 0; i < gene2D.length; i++) {
+			boolean[] existFlagRow = new boolean[gene2D.length + 1];
+			boolean[] existFlagColumn = new boolean[gene2D.length + 1];
 			for (int j = 0; j < gene2D.length; j++) {
 				if (gene2D[i][j] == 0 || (baseGene2D[i][j] != 0 && baseGene2D[i][j] != gene2D[i][j])) {
 					fitness += 100;
 				}
-				if (existFlagRow[gene2D[i][j] - 1]) {
+				if (existFlagRow[gene2D[i][j]]) {
 					fitness++;
 				}
-				if (existFlagColumn[gene2D[j][i] - 1]) {
+				if (existFlagColumn[gene2D[j][i]]) {
 					fitness++;
 				}
-				existFlagRow[gene2D[i][j] - 1] = true;
-				existFlagColumn[gene2D[j][i] - 1] = true;
+				existFlagRow[gene2D[i][j]] = true;
+				existFlagColumn[gene2D[j][i]] = true;
 			}
 		}
 	}
@@ -172,13 +185,13 @@ public class Chromosome {
 		int noOfBlocks = (int) Math.sqrt(gene2D.length);
 		for (int i = 0; i < gene2D.length; i += noOfBlocks) {
 			for (int j = 0; j < gene2D.length; j += noOfBlocks) {
-				boolean[] blocks = new boolean[gene2D.length];
+				boolean[] blocks = new boolean[gene2D.length + 1];
 				for (int k = 0; k < noOfBlocks; k++) {
 					for (int l = 0; l < noOfBlocks; l++) {
-						if (blocks[gene2D[i + k][j + l] - 1]) {
+						if (blocks[gene2D[i + k][j + l]]) {
 							fitness++;
 						}
-						blocks[gene2D[i + k][j + l] - 1] = true;
+						blocks[gene2D[i + k][j + l]] = true;
 					}
 				}
 			}
