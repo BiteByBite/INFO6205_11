@@ -3,6 +3,7 @@
  */
 package edu.neu.coe.info6205.sudoku;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,8 +25,12 @@ public class GeneticOperations {
 	public void performCrossover(List<Chromosome> chromosomeList) {
 
 		int size = chromosomeList.size();
-		for (int i = 0; i < size; i += 2) {
-			crossover(chromosomeList.get(i), chromosomeList.get(i + 1), chromosomeList);
+		for (int i = 0; i < size * 3 / 2; i += 2) {
+			if (rnd.nextBoolean()) {
+				crossover(chromosomeList.get(i), chromosomeList.get(i + 1), chromosomeList);
+			} else {
+				performMutation(chromosomeList, i);
+			}
 		}
 	}
 
@@ -46,7 +51,7 @@ public class GeneticOperations {
 
 	public void cullLessFitChromosomes(List<Chromosome> chromosomeList) {
 		int size = chromosomeList.size();
-		for (int i = size - 1; i >= size / 2; i--) {
+		for (int i = size - 1; i >= size * 2 / 5; i--) {
 			chromosomeList.remove(i);
 		}
 	}
@@ -72,23 +77,23 @@ public class GeneticOperations {
 	 * This method performs a mutation of the gene by assigning a random value
 	 * to a random gene
 	 */
-	public void performMutation(List<Chromosome> chromosomeList) {
+	public void performMutation(List<Chromosome> chromosomeList, int j) {
 
-		// List<Chromosome> newChromosomeList = new ArrayList<>();
-		for (Chromosome chromo : chromosomeList) {
+		int size = chromosomeList.size();
+		for (int i = 0; i < 2; i++) {
+			Chromosome chromo = chromosomeList.get(j + i);
 			int[] gene = chromo.getGene();
-			// int[] newGene = Arrays.copyOf(gene, gene.length);
-			int index = 0;
-			do {
-				index = rnd.nextInt(gene.length);
-			} while (chromo.getBaseGene()[index] != 0);
-			gene[index] = rnd.nextInt((int) Math.sqrt(gene.length)) + 1;
-			chromo.calculateFitness();
-			// Chromosome newChromo = new Chromosome(chromo.getBaseGene(),
-			// newGene);
-			// newChromosomeList.add(newChromo);
+			int[] newGene = Arrays.copyOf(gene, gene.length);
+			for (int k = 0; k < 3; k++) {
+				int index = 0;
+				do {
+					index = rnd.nextInt(gene.length);
+				} while (chromo.getBaseGene()[index] != 0);
+				newGene[index] = rnd.nextInt((int) Math.sqrt(gene.length)) + 1;
+			}
+			Chromosome newChromo = new Chromosome(chromo.getBaseGene(), newGene);
+			chromosomeList.add(newChromo);
 		}
-		// chromosomeList.addAll(newChromosomeList);
 	}
 
 	/**

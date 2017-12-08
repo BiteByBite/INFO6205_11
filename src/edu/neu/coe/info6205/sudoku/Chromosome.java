@@ -20,7 +20,7 @@ public class Chromosome {
 	 * @param baseGene
 	 */
 	public Chromosome(int[] baseGene) {
-		fitness = 0;
+
 		this.baseGene = baseGene;
 		gene = randomizeBaseGenes(baseGene.clone());
 		size = gene.length;
@@ -35,7 +35,7 @@ public class Chromosome {
 	 * @param gene
 	 */
 	public Chromosome(int[] baseGene, int[] gene) {
-		fitness = 0;
+
 		this.baseGene = baseGene;
 		this.gene = gene;
 		size = gene.length;
