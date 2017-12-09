@@ -22,16 +22,27 @@ public class GeneticOperations {
 		return chromosomeList.get(0);
 	}
 
-	public void performCrossover(List<Chromosome> chromosomeList) {
+	public void performCrossover(List<Chromosome> chromosomeList, int populationCount) {
 
 		int size = chromosomeList.size();
-		for (int i = 0; i < size * 3 / 2; i += 2) {
+		for (int i = 0; i < size; i += 2) {
 			if (rnd.nextBoolean()) {
 				crossover(chromosomeList.get(i), chromosomeList.get(i + 1), chromosomeList);
 			} else {
 				performMutation(chromosomeList, i);
 			}
 		}
+		sort(chromosomeList);
+		size = chromosomeList.size();
+		for (int i = 0; i < populationCount - size; i += 2) {
+			if (rnd.nextBoolean()) {
+				crossover(chromosomeList.get(i), chromosomeList.get(i + 1), chromosomeList);
+			} else {
+				performMutation(chromosomeList, i);
+			}
+
+		}
+
 	}
 
 	private void crossover(Chromosome c1, Chromosome c2, List<Chromosome> chromoList) {

@@ -157,20 +157,20 @@ public class Chromosome {
 	private void validateRowsAndColumns(int[][] gene2D, int[][] baseGene2D) {
 
 		for (int i = 0; i < gene2D.length; i++) {
-			boolean[] existFlagRow = new boolean[gene2D.length + 1];
-			boolean[] existFlagColumn = new boolean[gene2D.length + 1];
+			boolean[] existFlagRow = new boolean[gene2D.length];
+			boolean[] existFlagColumn = new boolean[gene2D.length];
 			for (int j = 0; j < gene2D.length; j++) {
 				if (gene2D[i][j] == 0 || (baseGene2D[i][j] != 0 && baseGene2D[i][j] != gene2D[i][j])) {
 					fitness += 100;
 				}
-				if (existFlagRow[gene2D[i][j]]) {
+				if (existFlagRow[gene2D[i][j] - 1]) {
 					fitness++;
 				}
-				if (existFlagColumn[gene2D[j][i]]) {
+				if (existFlagColumn[gene2D[j][i] - 1]) {
 					fitness++;
 				}
-				existFlagRow[gene2D[i][j]] = true;
-				existFlagColumn[gene2D[j][i]] = true;
+				existFlagRow[gene2D[i][j] - 1] = true;
+				existFlagColumn[gene2D[j][i] - 1] = true;
 			}
 		}
 	}
@@ -185,13 +185,13 @@ public class Chromosome {
 		int noOfBlocks = (int) Math.sqrt(gene2D.length);
 		for (int i = 0; i < gene2D.length; i += noOfBlocks) {
 			for (int j = 0; j < gene2D.length; j += noOfBlocks) {
-				boolean[] blocks = new boolean[gene2D.length + 1];
+				boolean[] blocks = new boolean[gene2D.length];
 				for (int k = 0; k < noOfBlocks; k++) {
 					for (int l = 0; l < noOfBlocks; l++) {
-						if (blocks[gene2D[i + k][j + l]]) {
+						if (blocks[gene2D[i + k][j + l] - 1]) {
 							fitness++;
 						}
-						blocks[gene2D[i + k][j + l]] = true;
+						blocks[gene2D[i + k][j + l] - 1] = true;
 					}
 				}
 			}
