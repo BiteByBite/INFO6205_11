@@ -1,1 +1,5 @@
-This repository contains Sudoku solving program using Genetic Algorithm
+This repository contains Sudoku solving program using Genetic Algorithm.
+Our implementation consists of a Chromosome class which essentially represents a Sudoku. It contains genes which are the numbers in the Sudoku puzzle.
+Population is an array of Chromosomes whose count is approximately in millions
+Detailed explanation is present in the presentation folder.
+The analysis and logs of the code are presented in their respective folders
